@@ -1,4 +1,3 @@
-const qrcode = require('qrcode-terminal');
 const axios = require('axios');
 const { Client, LocalAuth} = require('whatsapp-web.js');
 
@@ -23,7 +22,7 @@ client.on('message', async (message) => {
 
     if (lowerCase === 'news') {
         try {
-            const response = await axios.get('http://20.203.148.130:8000/pakistan');
+            const response = await axios.get('http://20.203.148.130:8000/');
             const articles = response.data;
 
             const articleCount = Math.min(3, articles.length); // limit to maximum of 3 articles
@@ -31,7 +30,7 @@ client.on('message', async (message) => {
 
             for (let i = 0; i < articleCount; i++) {
                 const article = articles[index];
-                await message.reply(`${article.title}\n${article.url}\nSource: ${article.source}`);
+                await message.reply(`*${article.title}*\n\n${article.description}\n\nSource: ${article.source}`);
                 index++;
             }
 
@@ -39,13 +38,14 @@ client.on('message', async (message) => {
                 await message.reply(`Type 'more' to get more articles.`);
             }
 
-        } catch (error) {
+        } 
+        catch (error) {
             console.error(error);
             await message.reply('Sorry, an error occurred while fetching the latest news.');
         }
     } else if (lowerCase === 'more') {
         try {
-            const response = await axios.get('http://20.203.148.130:8000/pakistan');
+            const response = await axios.get('http://20.203.148.130:8000/');
             const articles = response.data;
 
             const articleCount = Math.min(3, articles.length - 3); // get next 3 articles
@@ -56,7 +56,7 @@ client.on('message', async (message) => {
             } else {
                 for (let i = 0; i < articleCount; i++) {
                     const article = articles[index];
-                    await message.reply(`${article.title}\n${article.url}\nSource: ${article.source}`);
+                    await message.reply(`*${article.title}*\n\n${article.description}\n\nSource: ${article.source}`);
                     index++;
                 }
 
